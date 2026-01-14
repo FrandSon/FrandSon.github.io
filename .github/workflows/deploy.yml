@@ -1,0 +1,60 @@
+# Nombre del flujo de trabajo
+name: Deploy Vite to GitHub Pages
+
+# ¿Cuándo se ejecuta? Cuando haces push a la rama main
+on:
+  push:
+    branches: ["main"]
+  # Permite ejecutarlo manualmente desde la pestaña Actions
+  workflow_dispatch:
+
+# Permisos necesarios para que el bot de GitHub publique la página
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Solo permitimos un despliegue a la vez
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # Trabajo de construcción (Build)
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Construir proyecto (Vite Build)
+        run: npm run build
+
+      - name: Configurar Pages
+        uses: actions/configure-pages@v4
+
+      - name: Subir artefacto (la carpeta dist creada por Vite)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+
+  # Trabajo de despliegue (Deploy)
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Desplegar a GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
