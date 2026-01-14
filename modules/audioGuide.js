@@ -18,13 +18,16 @@ export const setupAudio = (camera) => {
     sound.setLoop(true); // set the audio source to loop
     sound.setVolume(0.5); // set the audio source volume
     bufferLoaded = true; // set bufferLoaded flag to true once the audio buffer is loaded
+
+    // CAMBIO: Intentar reproducir automáticamente apenas cargue
+    // (Nota: Puede que el navegador lo bloquee hasta el primer clic, por eso añadimos startAudio en los eventos)
+    sound.play();
   });
 };
 
 // play audio
 export const startAudio = () => {
-  if (sound && bufferLoaded) {
-    // check if the buffer is loaded before playing
+  if (sound && bufferLoaded && !sound.isPlaying) {
     sound.play();
   }
 };

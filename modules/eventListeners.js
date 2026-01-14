@@ -1,6 +1,6 @@
 import { keysPressed } from "./movement.js";
 import { showMenu, hideMenu } from "./menu.js";
-import { toggleAudio } from "./audioGuide.js";
+import { toggleAudio, startAudio } from "./audioGuide.js"; // CAMBIO: Importamos startAudio
 import { closeModal, isModalOpen } from "./paintingInfo.js";
 
 let lockPointer = true;
@@ -60,6 +60,14 @@ export const setupEventListeners = (controls, camera, scene) => {
     infoPanel.style.transition = "opacity 0.5s ease";
     infoPanel.addEventListener("mouseenter", showInfoPanel);
     infoPanel.addEventListener("mouseleave", hideInfoPanelDelayed);
+  }
+
+  // --- CAMBIO: Activar audio al hacer clic en el botón EXPLORAR ---
+  const playButton = document.getElementById("play_button");
+  if (playButton) {
+    playButton.addEventListener("click", () => {
+      startAudio();
+    });
   }
 
   // --- LOGICA DEL CURSOR ---
@@ -138,6 +146,7 @@ function onKeyDown(event, controls) {
     hideMenu();
     controls.lock();
     lockPointer = true;
+    startAudio(); // CAMBIO: Asegurar que el audio inicie al presionar Enter
   }
 
   if (event.key === " ") {
@@ -156,6 +165,7 @@ function onKeyDown(event, controls) {
       hideMenu();
       controls.lock();
       lockPointer = true;
+      startAudio(); // CAMBIO: Iniciar audio si ocultamos menú con M
     } else {
       showMenu();
       showMenuOnUnlock = true;
