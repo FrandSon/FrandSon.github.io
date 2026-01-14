@@ -34,8 +34,7 @@ export const setupRendering = (
       hidePaintingInfo();
     }
 
-    renderer.gammaOutput = true;
-    renderer.gammaFactor = 2.2;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     renderer.render(scene, camera);
     requestAnimationFrame(render);

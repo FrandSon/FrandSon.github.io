@@ -1,13 +1,50 @@
 import { keysPressed } from "./movement.js"; // import the keysPressed object
 import { showMenu, hideMenu } from "./menu.js"; // import the showMenu function
-import { startAudio, stopAudio } from "./audioGuide.js";
+import { toggleAudio } from "./audioGuide.js"; // Import the new toggle function
 
 let lockPointer = true;
 let showMenuOnUnlock = false;
 
-// add the controls parameter which is the pointer lock controls and is passed from main.js where setupEventListeners is called
+// Variables for the Info Panel Timeout logic
+let infoPanelTimeout;
+const infoPanel = document.getElementById("info-panel");
+
+// Helper to handle Info Panel visibility
+const showInfoPanel = () => {
+  if (infoPanel) {
+    infoPanel.classList.remove("collapsed"); // Ensure it's visible/expanded
+    infoPanel.style.opacity = "1"; // Make sure it's fully visible
+    clearTimeout(infoPanelTimeout); // Clear any existing timer to hide it
+  }
+};
+
+const hideInfoPanelDelayed = () => {
+  // Clear any existing timer first to avoid overlaps
+  clearTimeout(infoPanelTimeout);
+
+  if (infoPanel) {
+    // Set a new timer to hide it after 4 seconds
+    infoPanelTimeout = setTimeout(() => {
+      infoPanel.style.opacity = "0"; // Fade out or hide
+    }, 4000);
+  }
+};
+
 export const setupEventListeners = (controls, camera, scene) => {
-  // add the event listeners to the document which is the whole page
+  // 1. Setup Info Panel Behavior
+  if (infoPanel) {
+    // Hide it initially
+    infoPanel.style.opacity = "0";
+    infoPanel.style.transition = "opacity 0.5s ease"; // Smooth fade
+
+    // Mouse over -> Show
+    infoPanel.addEventListener("mouseenter", showInfoPanel);
+
+    // Mouse leave -> Start 4s timer to hide
+    infoPanel.addEventListener("mouseleave", hideInfoPanelDelayed);
+  }
+
+  // 2. Document Event Listeners
   document.addEventListener(
     "keydown",
     (event) => onKeyDown(event, controls),
@@ -25,10 +62,6 @@ export const setupEventListeners = (controls, camera, scene) => {
     }
     showMenuOnUnlock = false;
   });
-
-  // Add event listeners for the audio guide buttons
-  document.getElementById("start_audio").addEventListener("click", startAudio);
-  document.getElementById("stop_audio").addEventListener("click", stopAudio);
 };
 
 // toggle the pointer lock
@@ -72,26 +105,33 @@ function onKeyDown(event, controls) {
   }
 
   if (event.key === " ") {
-    // if the "p" key is pressed
+    // if the "Space" key is pressed
     togglePointerLock(controls); // toggle the pointer lock
   }
 
-  if (event.key === "g") {
-    // if the "a" key is pressed
-    startAudio(); // start the audio guide
+  // "a" key toggles audio
+  if (event.key === "a" || event.key === "A") {
+    toggleAudio();
   }
 
-  if (event.key === "p") {
-    // if the "s" key is pressed
-    stopAudio(); // stop the audio guide
-  }
+  // Lógica mejorada para la tecla "M"
+  if (event.key === "m" || event.key === "M") {
+    const menu = document.getElementById('menu');
+    // Verificamos si el menú está visible
+    const isMenuVisible = menu.style.display === 'block' || getComputedStyle(menu).display === 'block';
 
-  if (event.key === "m") {
-    // if the "h" key is pressed
-    showMenu(); // show the menu
-    showMenuOnUnlock = true;
-    controls.unlock(); // unlock the pointer
-    lockPointer = false;
+    if (isMenuVisible) {
+      // Si está visible, lo ocultamos y reanudamos (como al presionar Enter/Explorar)
+      hideMenu();
+      controls.lock();
+      lockPointer = true;
+    } else {
+      // Si está oculto, lo mostramos y pausamos (como al presionar Esc)
+      showMenu();
+      showMenuOnUnlock = true;
+      controls.unlock();
+      lockPointer = false;
+    }
   }
 
   if (event.key === "r") {
@@ -107,19 +147,26 @@ function onKeyUp(event, controls) {
   }
 }
 
-document.getElementById("toggle-info").addEventListener("click", () => {
-  document.getElementById("info-panel").classList.toggle("collapsed");
-  document.getElementById("toggle-info").innerText = document
-    .getElementById("info-panel")
-    .classList.contains("collapsed")
-    ? "Show"
-    : "Hide";
-});
+// Keep the internal toggle button just in case user clicks it manually
+const toggleInfoBtn = document.getElementById("toggle-info");
+if (toggleInfoBtn) {
+  toggleInfoBtn.addEventListener("click", () => {
+    const panel = document.getElementById("info-panel");
+    panel.classList.toggle("collapsed");
+    toggleInfoBtn.innerText = panel.classList.contains("collapsed") ? "Show" : "Hide";
+  });
+}
 
-document.getElementById("about_button").addEventListener("click", function () {
-  document.getElementById("about-overlay").classList.add("show");
-});
+const aboutBtn = document.getElementById("about_button");
+if (aboutBtn) {
+  aboutBtn.addEventListener("click", function () {
+    document.getElementById("about-overlay").classList.add("show");
+  });
+}
 
-document.getElementById("close-about").addEventListener("click", function () {
-  document.getElementById("about-overlay").classList.remove("show");
-});
+const closeAboutBtn = document.getElementById("close-about");
+if (closeAboutBtn) {
+  closeAboutBtn.addEventListener("click", function () {
+    document.getElementById("about-overlay").classList.remove("show");
+  });
+}

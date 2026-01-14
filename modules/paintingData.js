@@ -1,72 +1,120 @@
-export const paintingData = [
-  // Front Wall
-  ...Array.from({ length: 4 }, (_, i) => ({
-    // Array.from creates an array from an array-like object. The first parameter is the array-like object. The second parameter is a map function that is called for each element in the array-like object. The map function takes two parameters: the element and the index. The map function returns the value that will be added to the new array. In this case, we are returning an object with the painting data. `_` is a placeholder for the element. We don't need it because we are not using the element. `i` is the index. We use it to set the painting number.
-    imgSrc: `artworks/${i + 1}.jpg`, // `i + 1` is the painting number. We add 1 to the index because the index starts at 0 but we want the painting numbers to start at 1.
-    width: 5, // width of the painting
-    height: 3, // height of the painting
-    position: { x: -15 + 10 * i, y: 2, z: -19.5 }, // position of the painting
-    rotationY: 0, // rotation of the painting
+export const paintingData = [];
+
+const wallHeight = 40;
+const centerWallHeight = 25;
+
+// Configs
+const mainPaintingHeight = wallHeight * 0.7; // 28
+const mainPaintingWidth = mainPaintingHeight * 1.2; // ~33.6
+const centerPaintingHeight = centerWallHeight * 0.8; // 20
+const centerPaintingWidth = centerPaintingHeight * 0.8; // 16
+
+// Position Adjustments
+// Floor is at -3.14. Wall top is at 30.
+// Center of visible wall is approx 13.5.
+// We set Y=13. With height 28, bottom is 13 - 14 = -1, which clears the floor (-3.14).
+const mainY = 13;
+
+// --- FRONT WALL (Z = -60) ---
+for (let i = 0; i < 3; i++) {
+  paintingData.push({
+    imgSrc: `artworks/${(i % 4) + 1}.jpg`,
+    width: mainPaintingWidth,
+    height: mainPaintingHeight,
+    position: { x: -40 + i * 40, y: mainY, z: -59.5 },
+    rotationY: 0,
     info: {
-      // info about the painting
-      title: `Van Gogh ${i + 1}`,
-      artist: 'Vincent van Gogh',
-      description: `This is one of the masterpieces by Vincent van Gogh, showcasing his unique style and emotional honesty. Artwork ${
-        i + 1
-      } perfectly encapsulates his love for the beauty of everyday life.`,
-      year: `Year ${i + 1}`,
-      link: 'https://github.com/theringsofsaturn',
+      title: `Masterpiece ${i + 1}`,
+      artist: 'Artist Name',
+      description: `A stunning large-scale piece located on the North Wall.`,
+      year: `188${i}`,
     },
-  })),
-  // Back Wall
-  ...Array.from({ length: 4 }, (_, i) => ({
-    imgSrc: `artworks/${i + 5}.jpg`,
-    width: 5,
-    height: 3,
-    position: { x: -15 + 10 * i, y: 2, z: 19.5 },
+  });
+}
+
+// --- BACK WALL (Z = 60) ---
+for (let i = 0; i < 3; i++) {
+  paintingData.push({
+    imgSrc: `artworks/${(i % 4) + 5}.jpg`,
+    width: mainPaintingWidth,
+    height: mainPaintingHeight,
+    position: { x: -40 + i * 40, y: mainY, z: 59.5 },
     rotationY: Math.PI,
     info: {
-      title: `Van Gogh ${i + 5}`,
-      artist: 'Vincent van Gogh',
-      description: `Artwork ${
-        i + 5
-      } by Vincent van Gogh is an exceptional piece showcasing his remarkable ability to capture emotion and atmosphere.`,
-      year: `Year ${i + 5}`,
-      link: 'https://github.com/theringsofsaturn',
+      title: `Masterpiece ${i + 4}`,
+      artist: 'Artist Name',
+      description: `A stunning large-scale piece located on the South Wall.`,
+      year: `189${i}`,
     },
-  })),
-  // Left Wall
-  ...Array.from({ length: 4 }, (_, i) => ({
-    imgSrc: `artworks/${i + 9}.jpg`,
-    width: 5,
-    height: 3,
-    position: { x: -19.5, y: 2, z: -15 + 10 * i },
+  });
+}
+
+// --- LEFT WALL (X = -60) ---
+for (let i = 0; i < 3; i++) {
+  paintingData.push({
+    imgSrc: `artworks/${(i % 4) + 9}.jpg`,
+    width: mainPaintingWidth,
+    height: mainPaintingHeight,
+    position: { x: -59.5, y: mainY, z: -40 + i * 40 },
     rotationY: Math.PI / 2,
     info: {
-      title: `Van Gogh ${i + 9}`,
-      artist: 'Vincent van Gogh',
-      description: `With its striking use of color and brushwork, Artwork ${
-        i + 9
-      } is a testament to Van Gogh's artistic genius.`,
-      year: `Year ${i + 9}`,
-      link: 'https://github.com/theringsofsaturn',
+      title: `Masterpiece ${i + 7}`,
+      artist: 'Artist Name',
+      description: `A stunning large-scale piece located on the West Wall.`,
+      year: `190${i}`,
     },
-  })),
-  // Right Wall
-  ...Array.from({ length: 4 }, (_, i) => ({
-    imgSrc: `artworks/${i + 13}.jpg`,
-    width: 5,
-    height: 3,
-    position: { x: 19.5, y: 2, z: -15 + 10 * i },
+  });
+}
+
+// --- RIGHT WALL (X = 60) ---
+for (let i = 0; i < 3; i++) {
+  paintingData.push({
+    imgSrc: `artworks/${(i % 4) + 13}.jpg`,
+    width: mainPaintingWidth,
+    height: mainPaintingHeight,
+    position: { x: 59.5, y: mainY, z: -40 + i * 40 },
     rotationY: -Math.PI / 2,
     info: {
-      title: `Van Gogh ${i + 13}`,
-      artist: 'Vincent van Gogh',
-      description: `Artwork ${
-        i + 13
-      } is a captivating piece by Vincent van Gogh, reflecting his distinctive style and deep passion for art.`,
-      year: `Year ${i + 13}`,
-      link: 'https://github.com/theringsofsaturn',
+      title: `Masterpiece ${i + 10}`,
+      artist: 'Artist Name',
+      description: `A stunning large-scale piece located on the East Wall.`,
+      year: `191${i}`,
     },
-  })),
-];
+  });
+}
+
+// --- CENTER WALL (Z = 0) ---
+// Y=9 works well for these as confirmed.
+paintingData.push({
+  imgSrc: `artworks/2.jpg`,
+  width: centerPaintingWidth,
+  height: centerPaintingHeight,
+  position: { x: -15, y: 9, z: -1.2 },
+  rotationY: Math.PI,
+  info: { title: 'Center Piece 1', artist: 'Unknown', description: 'Central Display', year: '2023' }
+});
+paintingData.push({
+  imgSrc: `artworks/3.jpg`,
+  width: centerPaintingWidth,
+  height: centerPaintingHeight,
+  position: { x: 15, y: 9, z: -1.2 },
+  rotationY: Math.PI,
+  info: { title: 'Center Piece 2', artist: 'Unknown', description: 'Central Display', year: '2023' }
+});
+
+paintingData.push({
+  imgSrc: `artworks/4.jpg`,
+  width: centerPaintingWidth,
+  height: centerPaintingHeight,
+  position: { x: -15, y: 9, z: 1.2 },
+  rotationY: 0,
+  info: { title: 'Center Piece 3', artist: 'Unknown', description: 'Central Display', year: '2023' }
+});
+paintingData.push({
+  imgSrc: `artworks/5.jpg`,
+  width: centerPaintingWidth,
+  height: centerPaintingHeight,
+  position: { x: 15, y: 9, z: 1.2 },
+  rotationY: 0,
+  info: { title: 'Center Piece 4', artist: 'Unknown', description: 'Central Display', year: '2023' }
+});

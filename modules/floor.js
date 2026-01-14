@@ -21,14 +21,17 @@ export const setupFloor = (scene) => {
     "WoodFloor040_4K-JPG/WoodFloor040_4K_AmbientOcclusion.jpg"
   );
 
-  // Set texture parameters
-  colorTexture.wrapS = colorTexture.wrapT = THREE.RepeatWrapping;
-  displacementTexture.wrapS = displacementTexture.wrapT = THREE.RepeatWrapping;
-  normalTexture.wrapS = normalTexture.wrapT = THREE.RepeatWrapping;
-  roughnessTexture.wrapS = roughnessTexture.wrapT = THREE.RepeatWrapping;
-  aoTexture.wrapS = aoTexture.wrapT = THREE.RepeatWrapping;
+  // Set texture parameters (Repeat more times for the larger floor)
+  // Adjusted repeat wrapping to maintain texture density on larger plane
+  const repeatFactor = 8;
 
-  const planeGeometry = new THREE.PlaneGeometry(45, 45);
+  [colorTexture, displacementTexture, normalTexture, roughnessTexture, aoTexture].forEach(tex => {
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(repeatFactor, repeatFactor);
+  });
+
+  // Expanded geometry to 140x140 to cover the new 120x120 room area
+  const planeGeometry = new THREE.PlaneGeometry(140, 140);
   const planeMaterial = new THREE.MeshStandardMaterial({
     map: colorTexture,
     displacementMap: displacementTexture,

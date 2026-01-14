@@ -23,9 +23,9 @@ function onClick(camera, paintings) {
   if (intersects.length > 0) {
     const painting = intersects[0].object;
 
-    // Perform the desired action, e.g., open a modal or redirect to another page
+    // Log the click for debugging
     console.log('Clicked painting:', painting.userData.info.title);
-    window.open(painting.userData.info.link, '_blank');
+
   }
 }
 

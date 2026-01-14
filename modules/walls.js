@@ -20,40 +20,44 @@ export function createWalls(scene, textureLoader) {
     roughnessMap: roughnessTexture,
     side: THREE.DoubleSide,
   });
-  // Front Wall
-  const frontWall = new THREE.Mesh(
-    new THREE.BoxGeometry(80, 20, 0.001),
-    wallMaterial
-  );
 
-  frontWall.position.z = -20;
+  // Room Dimensions have been tripled (approx 120x120) and height doubled (40)
+  // Wall Geometry width increased to 200 to ensure full coverage
+  // Height increased to 40
+  const wallGeometry = new THREE.BoxGeometry(200, 40, 0.001);
+
+  // Front Wall
+  const frontWall = new THREE.Mesh(wallGeometry, wallMaterial);
+  frontWall.position.z = -60; // Moved from -20 to -60
+  frontWall.position.y = 10;  // Raised so bottom sits near floor (approx -10)
 
   // Left Wall
-  const leftWall = new THREE.Mesh(
-    new THREE.BoxGeometry(80, 20, 0.001),
-    wallMaterial
-  );
-
+  const leftWall = new THREE.Mesh(wallGeometry, wallMaterial);
   leftWall.rotation.y = Math.PI / 2;
-  leftWall.position.x = -20;
+  leftWall.position.x = -60; // Moved from -20 to -60
+  leftWall.position.y = 10;
 
   // Right Wall
-  const rightWall = new THREE.Mesh(
-    new THREE.BoxGeometry(80, 20, 0.001),
-    wallMaterial
-  );
-
-  rightWall.position.x = 20;
+  const rightWall = new THREE.Mesh(wallGeometry, wallMaterial);
+  rightWall.position.x = 60; // Moved from 20 to 60
   rightWall.rotation.y = Math.PI / 2;
+  rightWall.position.y = 10;
 
   // Back Wall
-  const backWall = new THREE.Mesh(
-    new THREE.BoxGeometry(80, 20, 0.001),
-    wallMaterial
-  );
-  backWall.position.z = 20;
+  const backWall = new THREE.Mesh(wallGeometry, wallMaterial);
+  backWall.position.z = 60; // Moved from 20 to 60
+  backWall.position.y = 10;
 
-  wallGroup.add(frontWall, backWall, leftWall, rightWall);
+  // New Center Wall
+  // Aesthetic separator: doesn't touch ceiling or outer walls
+  const centerWallGeometry = new THREE.BoxGeometry(60, 25, 2);
+  const centerWall = new THREE.Mesh(centerWallGeometry, wallMaterial);
+
+  // Positioned in the center of the room
+  // Y = 9 places the bottom roughly at -3.5 (near the floor which is at -Math.PI)
+  centerWall.position.set(0, 9, 0);
+
+  wallGroup.add(frontWall, backWall, leftWall, rightWall, centerWall);
 
   return wallGroup;
 }

@@ -1,39 +1,30 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader";
-import { GUI } from "lil-gui";
 
-export const loadBenchModel = (scene) => {
+export const loadBenchModel = (scene, x, y, z, rotationY) => {
   const loader = new GLTFLoader();
-  const gui = new GUI();
 
-  loader.load("/models/bench_2/scene.gltf", (gltf) => {
-    const bench = gltf.scene;
-    console.log("BENCH", gltf);
+  loader.load(
+    "/models/bench_2/scene.gltf",
+    (gltf) => {
+      const bench = gltf.scene;
 
-    // Iterate through all the meshes in the bench and update their materials
-    bench.traverse((child) => {
-      if (child.isMesh) {
-        console.log("Materials:", child.material);
-        console.log("Map Material", child.material.map);
-        console.log("Material Name:", child.material.name);
-        console.log("Material Type:", child.material.type);
-        console.log("UV attributes:", child.geometry.attributes.uv);
-      }
-      undefined,
-        (error) => {
-          console.error(
-            "An error occurred while loading the bench model.",
-            error
-          );
-        };
-    });
+      bench.position.set(x, y, z);
+      bench.rotation.y = rotationY;
+      bench.scale.set(3, 3, 3); // Kept your original scale
 
-    // Default Position and Scale
-    bench.position.set(0, -3.12, -8);
-    bench.rotation.set(0, 0, 0);
-    bench.scale.set(3, 3, 3);
+      bench.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
 
-    // Add the bench to the scene
-    scene.add(bench);
-  });
+      scene.add(bench);
+    },
+    undefined,
+    (error) => {
+      console.error("An error occurred while loading the bench model.", error);
+    }
+  );
 };

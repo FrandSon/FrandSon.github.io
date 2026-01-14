@@ -1,6 +1,5 @@
 import * as THREE from "three";
 
-// create a function that takes a scene and a textureLoader as arguments that will be passed in from main.js where the createCeiling is called
 export const createCeiling = (scene, textureLoader) => {
   // Load the textures
   const colorTexture = textureLoader.load(
@@ -25,16 +24,15 @@ export const createCeiling = (scene, textureLoader) => {
     "OfficeCeiling005_4K-JPG/OfficeCeiling005_4K_Roughness.jpg"
   );
 
-  // Set texture parameters
-  colorTexture.wrapS = colorTexture.wrapT = THREE.RepeatWrapping;
-  displacementTexture.wrapS = displacementTexture.wrapT = THREE.RepeatWrapping;
-  aoTexture.wrapS = aoTexture.wrapT = THREE.RepeatWrapping;
-  emissionTexture.wrapS = emissionTexture.wrapT = THREE.RepeatWrapping;
-  metalnessTexture.wrapS = metalnessTexture.wrapT = THREE.RepeatWrapping;
-  normalGLTexture.wrapS = normalGLTexture.wrapT = THREE.RepeatWrapping;
-  roughnessTexture.wrapS = roughnessTexture.wrapT = THREE.RepeatWrapping;
+  // Increase repeat for larger surface area
+  const repeatFactor = 8;
+  [colorTexture, displacementTexture, aoTexture, emissionTexture, metalnessTexture, normalGLTexture, roughnessTexture].forEach(tex => {
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(repeatFactor, repeatFactor);
+  });
 
-  const ceilingGeometry = new THREE.PlaneGeometry(45, 40);
+  // Expanded geometry to 140x140 to match floor and new room size
+  const ceilingGeometry = new THREE.PlaneGeometry(140, 140);
   const ceilingMaterial = new THREE.MeshLambertMaterial({
     map: colorTexture,
     displacementMap: displacementTexture,
@@ -51,7 +49,8 @@ export const createCeiling = (scene, textureLoader) => {
 
   ceilingPlane.rotation.x = Math.PI / 2;
 
-  ceilingPlane.position.y = 10;
+  // Raised to 30. (Wall height 40, centered at Y=10 => top is 30)
+  ceilingPlane.position.y = 30;
 
   scene.add(ceilingPlane);
 };

@@ -35,3 +35,16 @@ export const stopAudio = () => {
     sound.pause();
   }
 };
+
+// toggle audio (New function for the 'A' key)
+export const toggleAudio = () => {
+  if (sound && bufferLoaded) {
+    if (sound.isPlaying) {
+      sound.pause();
+      console.log("Audio Paused");
+    } else {
+      sound.play();
+      console.log("Audio Playing");
+    }
+  }
+};
