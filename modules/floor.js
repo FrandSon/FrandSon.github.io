@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import floortTexture from "../public/WoodFloor040_4K-JPG/WoodFloor040_4K_Color.jpg";
+import floortTexture from "/WoodFloor040_4K-JPG/WoodFloor040_4K_Color.jpg";
 
 export const setupFloor = (scene) => {
   const textureLoader = new THREE.TextureLoader();
