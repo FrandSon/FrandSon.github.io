@@ -2,12 +2,15 @@ export const paintingData = [];
 
 const wallHeight = 40;
 const centerWallHeight = 25;
+const centerWallWidth = 60; // Ancho definido en walls.js
 
 // Configs
 const mainPaintingHeight = wallHeight * 0.7; // 28
 const mainPaintingWidth = mainPaintingHeight * 1.2; // ~33.6
 const centerPaintingHeight = centerWallHeight * 0.8; // 20
-const centerPaintingWidth = centerPaintingHeight * 0.8; // 16
+
+// CAMBIO: Ahora es exactamente el 40% del ancho del muro (60 * 0.4 = 24)
+const centerPaintingWidth = centerWallWidth * 0.4;
 
 // Position Adjustments
 // Floor is at -3.14. Wall top is at 30.
@@ -85,6 +88,10 @@ for (let i = 0; i < 3; i++) {
 
 // --- CENTER WALL (Z = 0) ---
 // Y=9 works well for these as confirmed.
+// Las posiciones X en -15 y 15 funcionan perfectamente con ancho 24:
+// - Izquierda: centro en -15, ocupa de -27 a -3.
+// - Derecha: centro en 15, ocupa de 3 a 27.
+// Margen central de 6 unidades y márgenes laterales de 3 unidades.
 paintingData.push({
   imgSrc: `artworks/2.jpg`,
   width: centerPaintingWidth,

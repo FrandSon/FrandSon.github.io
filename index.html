@@ -76,17 +76,39 @@
         <p><b>Ratón:</b> Mirar alrededor</p>
         <p><b>Espacio:</b> Activar/desactivar control del ratón</p>
         <p><b>M:</b> Mostrar menú</p>
+        <p><b>Click:</b> Ver detalles obra</p> 
         <p><b>Enter:</b> Iniciar exploración</p>
-        <p><b>Esc:</b> Detener exploración</p>
-        <p><b>A:</b> Activar/Desactivar Audio</p> <!-- Actualizado -->
+        <p><b>Esc:</b> Detener / Cerrar detalle</p>
+        <p><b>A:</b> Activar/Desactivar Audio</p> 
         <p><b>R:</b> Recargar experiencia</p>
       </div>
     </div>
 
-    <!-- NOTA: Se eliminaron los botones #audio_controls ya que ahora se usa la tecla 'A' -->
-
-    <!-- Contenedor para la información de la pintura (se llena dinámicamente) -->
+    <!-- Contenedor para la información de proximidad (etiqueta pequeña) -->
     <div id="painting-info"></div>
+
+    <!-- NUEVO: Cursor de Punto (Guía) -->
+    <div id="cursor-dot"></div>
+
+    <!-- Modal Flotante para Detalles de la Obra (Click) -->
+    <div id="painting-modal" class="hide">
+      <div class="modal-content">
+        <button id="close-modal">X</button>
+        <div id="modal-img-container">
+           <!-- La imagen se insertará aquí dinámicamente -->
+        </div>
+        <div id="modal-text-content">
+           <h2 id="modal-title">Título de la Obra</h2>
+           <h4 id="modal-artist">Artista</h4>
+           <p id="modal-year">Año</p>
+           <hr/>
+           <p id="modal-description">Descripción detallada...</p>
+        </div>
+        <div class="modal-footer">
+           <p>Haz click fuera o presiona ESC para cerrar</p>
+        </div>
+      </div>
+    </div>
 
     <!-- Script Principal -->
     <script type="module" src="./main.js"></script>

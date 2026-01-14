@@ -6,10 +6,6 @@ export const keysPressed = {
   ArrowDown: false,
   ArrowLeft: false,
   ArrowRight: false,
-  w: false,
-  a: false,
-  s: false,
-  d: false,
 };
 
 // parameters we get from setupRendering where updateMovement is called. setupRendering gets the parameters from main.jsss
@@ -19,16 +15,16 @@ export const updateMovement = (delta, controls, camera, walls) => {
   const previousPosition = camera.position.clone(); // clone the camera position and store it in previousPosition. We will use this to reset the camera position if there is a collision
 
   // cose self-explanatory
-  if (keysPressed.ArrowRight || keysPressed.d) {
+  if (keysPressed.ArrowRight) {
     controls.moveRight(moveSpeed);
   }
-  if (keysPressed.ArrowLeft || keysPressed.a) {
+  if (keysPressed.ArrowLeft) {
     controls.moveRight(-moveSpeed);
   }
-  if (keysPressed.ArrowUp || keysPressed.w) {
+  if (keysPressed.ArrowUp) {
     controls.moveForward(moveSpeed);
   }
-  if (keysPressed.ArrowDown || keysPressed.s) {
+  if (keysPressed.ArrowDown) {
     controls.moveForward(-moveSpeed);
   }
 
