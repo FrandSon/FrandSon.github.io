@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { displayPaintingInfo, hidePaintingInfo } from "./paintingInfo.js";
 import { updateMovement } from "./movement.js";
+import { updateAutopilot, isAutopilotActive } from "./autopilot.js"; // Importar
 
 export const setupRendering = (
   scene,
@@ -15,7 +16,14 @@ export const setupRendering = (
   let render = function () {
     const delta = clock.getDelta();
 
-    updateMovement(delta, controls, camera, walls);
+    // LÓGICA DE ACTUALIZACIÓN
+    if (isAutopilotActive()) {
+      // Si el piloto automático está activo, él controla la cámara
+      updateAutopilot(delta, camera);
+    } else {
+      // Si no, el jugador controla el movimiento
+      updateMovement(delta, controls, camera, walls);
+    }
 
     const distanceThreshold = 8;
 

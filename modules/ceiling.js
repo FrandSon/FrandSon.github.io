@@ -3,25 +3,25 @@ import * as THREE from "three";
 export const createCeiling = (scene, textureLoader) => {
   // Load the textures
   const colorTexture = textureLoader.load(
-    "OfficeCeiling005_4K-JPG/OfficeCeiling005_4K_Color.jpg"
+    "OfficeCeiling005_2K-JPG/OfficeCeiling005_2K-JPG_Color.jpg"
   );
   const displacementTexture = textureLoader.load(
-    "OfficeCeiling005_4K-JPG/OfficeCeiling005_4K_Displacement.jpg"
+    "OfficeCeiling005_2K-JPG/OfficeCeiling005_2K-JPG_Displacement.jpg"
   );
   const aoTexture = textureLoader.load(
-    "OfficeCeiling005_4K-JPG/OfficeCeiling005_4K_AmbientOcclusion.jpg"
+    "OfficeCeiling005_2K-JPG/OfficeCeiling005_2K-JPG_AmbientOcclusion.jpg"
   );
   const emissionTexture = textureLoader.load(
-    "OfficeCeiling005_4K-JPG/OfficeCeiling005_4K_Emission.jpg"
+    "OfficeCeiling005_2K-JPG/OfficeCeiling005_2K-JPG_Emission.jpg"
   );
   const metalnessTexture = textureLoader.load(
-    "OfficeCeiling005_4K-JPG/OfficeCeiling005_4K_Metalness.jpg"
+    "OfficeCeiling005_2K-JPG/OfficeCeiling005_2K-JPG_Metalness.jpg"
   );
   const normalGLTexture = textureLoader.load(
-    "OfficeCeiling005_4K-JPG/OfficeCeiling005_4K_NormalGL.jpg"
+    "OfficeCeiling005_2K-JPG/OfficeCeiling005_2K-JPG_NormalGL.jpg"
   );
   const roughnessTexture = textureLoader.load(
-    "OfficeCeiling005_4K-JPG/OfficeCeiling005_4K_Roughness.jpg"
+    "OfficeCeiling005_2K-JPG/OfficeCeiling005_2K-JPG_Roughness.jpg"
   );
 
   // Increase repeat for larger surface area

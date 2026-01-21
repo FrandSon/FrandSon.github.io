@@ -1,7 +1,8 @@
 import { keysPressed } from "./movement.js";
 import { showMenu, hideMenu } from "./menu.js";
-import { toggleAudio, startAudio } from "./audioGuide.js"; // CAMBIO: Importamos startAudio
+import { toggleAudio } from "./audioGuide.js"; // CAMBIO: Ya no importamos startAudio porque no lo usaremos automáticamente
 import { closeModal, isModalOpen } from "./paintingInfo.js";
+import { startAutopilot, stopAutopilot, isAutopilotActive } from "./autopilot.js";
 
 let lockPointer = true;
 let showMenuOnUnlock = false;
@@ -30,25 +31,24 @@ const hideInfoPanelDelayed = () => {
   }
 };
 
-// Función para manejar la visibilidad del punto cursor
 const handleCursorVisibility = (controls) => {
   const dot = document.getElementById("cursor-dot");
   if (!dot) return;
 
-  // Si el control está bloqueado (jugando) y no hay modales abiertos
-  if (controls.isLocked) {
-    dot.style.opacity = "1"; // Mostrar punto
+  if (isAutopilotActive()) {
+    dot.style.opacity = "0";
+    return;
+  }
 
-    // Reiniciar temporizador de inactividad
+  if (controls.isLocked) {
+    dot.style.opacity = "1";
     clearTimeout(cursorHideTimeout);
     cursorHideTimeout = setTimeout(() => {
-      // Si pasan 4 segundos sin mover el mouse, ocultar punto
-      if (controls.isLocked) { // Doble chequeo
+      if (controls.isLocked && !isAutopilotActive()) {
         dot.style.opacity = "0";
       }
     }, 4000);
   } else {
-    // Si estamos en menú o modal, ocultar punto inmediatamente
     dot.style.opacity = "0";
   }
 };
@@ -62,16 +62,15 @@ export const setupEventListeners = (controls, camera, scene) => {
     infoPanel.addEventListener("mouseleave", hideInfoPanelDelayed);
   }
 
-  // --- CAMBIO: Activar audio al hacer clic en el botón EXPLORAR ---
+  // CAMBIO: Eliminada la llamada a startAudio() aquí.
+  // El botón explorar solo inicia el control, no la música.
   const playButton = document.getElementById("play_button");
   if (playButton) {
     playButton.addEventListener("click", () => {
-      startAudio();
+      // Solo desbloqueo/bloqueo de controles implícito al hacer click en canvas después
     });
   }
 
-  // --- LOGICA DEL CURSOR ---
-  // Escuchar movimiento del mouse globalmente
   document.addEventListener("mousemove", () => {
     handleCursorVisibility(controls);
   });
@@ -88,9 +87,13 @@ export const setupEventListeners = (controls, camera, scene) => {
   );
 
   controls.addEventListener("unlock", () => {
-    // Cuando se desbloquea (Menú o Modal), ocultar el punto
     const dot = document.getElementById("cursor-dot");
     if (dot) dot.style.opacity = "0";
+
+    if (isAutopilotActive()) {
+      showMenuOnUnlock = false;
+      return;
+    }
 
     if (isModalOpen()) {
       showMenuOnUnlock = false;
@@ -103,7 +106,6 @@ export const setupEventListeners = (controls, camera, scene) => {
     showMenuOnUnlock = false;
   });
 
-  // Cuando se bloquea (Volver al juego), mostrar el punto
   controls.addEventListener("lock", () => {
     handleCursorVisibility(controls);
   });
@@ -125,6 +127,10 @@ function onKeyDown(event, controls) {
   }
 
   if (event.key === "Escape") {
+    if (isAutopilotActive()) {
+      stopAutopilot(controls);
+    }
+
     if (isModalOpen()) {
       closeModal();
       controls.lock();
@@ -137,16 +143,25 @@ function onKeyDown(event, controls) {
     lockPointer = false;
   }
 
-  if (event.key === "p") {
-    controls.unlock();
-    lockPointer = false;
+  if (event.key === "p" || event.key === "P") {
+    if (isAutopilotActive()) {
+      stopAutopilot(controls);
+      lockPointer = true;
+    } else {
+      showMenuOnUnlock = false;
+      startAutopilot(controls);
+      lockPointer = false;
+    }
   }
 
   if (event.key === "Enter" || event.key === "Return") {
+    if (isAutopilotActive()) {
+      stopAutopilot(controls);
+    }
     hideMenu();
     controls.lock();
     lockPointer = true;
-    startAudio(); // CAMBIO: Asegurar que el audio inicie al presionar Enter
+    // CAMBIO: Eliminada la llamada startAudio()
   }
 
   if (event.key === " ") {
@@ -158,6 +173,10 @@ function onKeyDown(event, controls) {
   }
 
   if (event.key === "m" || event.key === "M") {
+    if (isAutopilotActive()) {
+      stopAutopilot(controls);
+    }
+
     const menu = document.getElementById('menu');
     const isMenuVisible = menu.style.display === 'block' || getComputedStyle(menu).display === 'block';
 
@@ -165,7 +184,7 @@ function onKeyDown(event, controls) {
       hideMenu();
       controls.lock();
       lockPointer = true;
-      startAudio(); // CAMBIO: Iniciar audio si ocultamos menú con M
+      // CAMBIO: Eliminada la llamada startAudio()
     } else {
       showMenu();
       showMenuOnUnlock = true;

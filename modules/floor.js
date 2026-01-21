@@ -1,24 +1,24 @@
 import * as THREE from "three";
-import floortTexture from "/WoodFloor040_4K-JPG/WoodFloor040_4K_Color.jpg";
+import floortTexture from "/WoodFloor040_2K-JPG/WoodFloor040_2K-JPG_Color.jpg";
 
 export const setupFloor = (scene) => {
   const textureLoader = new THREE.TextureLoader();
 
   // Load the textures
   const colorTexture = textureLoader.load(
-    "WoodFloor040_4K-JPG/WoodFloor040_4K_Color.jpg"
+    "WoodFloor040_2K-JPG/WoodFloor040_2K-JPG_Color.jpg"
   );
   const displacementTexture = textureLoader.load(
-    "WoodFloor040_4K-JPG/WoodFloor040_4K_Displacement.jpg"
+    "WoodFloor040_2K-JPG/WoodFloor040_2K-JPG_Displacement.jpg"
   );
   const normalTexture = textureLoader.load(
-    "WoodFloor040_4K-JPG/WoodFloor040_4K_NormalGL.jpg"
+    "WoodFloor040_2K-JPG/WoodFloor040_2K-JPG_NormalGL.jpg"
   );
   const roughnessTexture = textureLoader.load(
-    "WoodFloor040_4K-JPG/WoodFloor040_4K_Roughness.jpg"
+    "WoodFloor040_2K-JPG/WoodFloor040_2K-JPG_Roughness.jpg"
   );
   const aoTexture = textureLoader.load(
-    "WoodFloor040_4K-JPG/WoodFloor040_4K_AmbientOcclusion.jpg"
+    "WoodFloor040_2K-JPG/WoodFloor040_2K-JPG_AmbientOcclusion.jpg"
   );
 
   // Set texture parameters (Repeat more times for the larger floor)
